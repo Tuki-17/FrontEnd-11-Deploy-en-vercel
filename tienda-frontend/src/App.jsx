@@ -7,7 +7,7 @@ import toast, { Toaster } from 'react-hot-toast';
 export default function App() {
   const [productos, setProductos] = useState([]);
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [cargando, setCargando] = useState(true);
   const [lento, setLento] = useState(false);
 
   // Estados del Carrito
@@ -47,13 +47,13 @@ export default function App() {
   const [loginError, setLoginError] = useState(null);
 
   useEffect(() => {
-    if (!loading) {
+    if (!cargando) {
       setLento(false);
       return;
     }
     const t = setTimeout(() => setLento(true), 5000);
     return () => clearTimeout(t);
-  }, [loading]);
+  }, [cargando]);
 
   // Cargar usuario inicial
   useEffect(() => {
@@ -68,7 +68,7 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    setLoading(true);
+    setCargando(true);
     getProductos()
       .then((data) => {
         setProductos(data);
@@ -78,7 +78,7 @@ export default function App() {
         setError(err.message);
       })
       .finally(() => {
-        setLoading(false);
+        setCargando(false);
       });
   }, []);
 
@@ -338,14 +338,14 @@ export default function App() {
             </div>
           </div>
           
-          {loading && (
+          {cargando && (
             <p className="loading-text">
               {lento ? "Despertando el servidor, la primera visita puede tardar un minuto…" : "Cargando productos…"}
             </p>
           )}
           {error && <div className="error-box">⚠️ Error: {error}</div>}
           
-          {!loading && !error && (
+          {!cargando && !error && (
             <div className="product-grid">
               {productos.map((prod) => (
                 <ProductCard 
